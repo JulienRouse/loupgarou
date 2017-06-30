@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+    <head>
+	<title>Socket.IO chat</title>
+	<link rel="stylesheet" href="static/css/style.css">
+    </head>
+    <body>
+	<div class="game-container">
+	</div>
+	<div class="chatrooms-container clearfix">
+	    <!-- public -->
+	    <div class="mini-chatroom-container clearfix">
+		<ul id="messages-public" class="chatrooms">
+		    <li>Bonjour toi</li>
+		</ul>
+		<form id="form-public"action="">
+		    <input id="m-public" autocomplete="off" /><button>Send</button>
+		</form>
+	    </div>
+	    <!-- chat garou -->
+	    <div class="mini-chatroom-container clearfix">
+		<ul id="messages-garou" class="chatrooms">
+		    <li>Bonjour toi</li>
+		</ul>
+		<form id="form-garou"action="">
+		    <input id="m-garou" autocomplete="off" /><button>Send</button>
+		</form>
+	    </div>
+	</div>
+	<!-- script -------------------------------------------------------------------- -->
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="static/js/client.js"></script>
+    </body>
+</html>
