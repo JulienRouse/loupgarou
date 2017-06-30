@@ -5,6 +5,11 @@
 	<link rel="stylesheet" href="static/css/style.css">
     </head>
     <body>
+	<header>
+	    <input id="nickname" type="text" value="player1" disabled="true">
+	    <input id="colorPicker" type="color" name="color" value="#A0A0A0" placeholder="#CCC">
+	    <button id="editNickname" type="button" onclick="editNickname(this);">edit</button>
+	</header>
 	<div class="game-container">
 	</div>
 	<div class="chatrooms-container clearfix">
@@ -29,7 +34,9 @@
 	</div>
 	<!-- script -------------------------------------------------------------------- -->
 	<script src="/socket.io/socket.io.js"></script>
-	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+		integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+		crossorigin="anonymous"></script>
 	<script src="static/js/client.js"></script>
     </body>
 </html>

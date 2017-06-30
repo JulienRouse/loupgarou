@@ -2,6 +2,11 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font: 13px Helvetica, Arial; }
 
+/* header */
+#nickname{border:2px  solid #a0a0a0;border-left-width:10px}
+
+/* end header  */
+/* ----------------------------------------------------------- */
 
 /* place for the game */
 .game-container{height:500px;background-color:#eee;}

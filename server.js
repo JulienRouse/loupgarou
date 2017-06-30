@@ -19,19 +19,24 @@ app.get('/', function(req, res){
     res.sendFile(mypath);
 });
 
+// ----- interactions with sockets --------------------------------------------------------------------
 io.on('connection', function(socket){
     // public
     var channelPublic = 'chat message public';
     socket.on(channelPublic, function(msg){
-    io.emit(channelPublic, msg);
+	console.log(nick);
+	console.log(color);
+	console.log(msg);
+	io.emit(channelPublic, msg);
    });
     // garou
     var channelGarou = 'chat message garou';
     socket.on(channelGarou, function(msg){
-    io.emit(channelGarou, msg);
+	io.emit(channelGarou, msg);
   });
 });
 
+// -----------------listen-----------------------------------------------------------------------
 http.listen(process.env.PORT || 3000, function(){
   console.log('listening on *:3000');
 });
