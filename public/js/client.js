@@ -33,9 +33,26 @@ function saveNickname(element){
     element.innerHTML = "edit";
 }
 
+/**
+* Object createMessageObject(string, string, string)
+*
+* Create an object that represent a message for the chat. It is composed of 3 parts,
+* nick for the sender, colorCode for the color of the message, and msgtext for the content.
+*
+* @param {string} nick the name of the message sender 
+* @param {string} colorCode must be a valid string representation of a color. (valid as understable by css)
+* @param {string} msgText the content of the message
+* @return {Object} an object with fields nickname, color and msg
+* @side-effect: none 
+*/
+function createMessageObject(nickname, colorCode, msgText){
+    return {nick : nickname, color : colorCode, msg : msgText};
+}
+
 
 $(function () {
     var socket = io();
+   
     // HEADER -------------------------------------------------------------------------
     $('#colorPicker').change(function(){
 	$('#nickname').css("border-color", $('#colorPicker').val());
@@ -43,13 +60,14 @@ $(function () {
     // CHAT   -------------------------------------------------------------------------
     //public
     $('#form-public').submit( function(){
-	socket.emit('chat message public' , $('#nickname').val(), $('#colorPicker').val(), $('#m-public').val());
+	socket.emit('chat message public' , createMessageObject($('#nickname').val(), $('#colorPicker').val(), $('#m-public').val()));
 	$('#m-public').val('');
 	return false;
     });
-    socket.on('chat message public', function(nick, color, msg){
-	var newLi = $("<li>").css('color',color);
-	newLi.text(nick + ": " + msg);
+    socket.on('chat message public', function(messageObject){
+	var newLi = $("<li>");
+	newLi.css('color', messageObject.color);
+	newLi.text(messageObject.nick + ": " + messageObject.msg);
 	$('#messages-public').append(newLi);
     });
     

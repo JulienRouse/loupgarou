@@ -23,11 +23,11 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
     // public
     var channelPublic = 'chat message public';
-    socket.on(channelPublic, function(msg){
-	console.log(nick);
-	console.log(color);
-	console.log(msg);
-	io.emit(channelPublic, msg);
+    socket.on(channelPublic, function(messageObject){
+	console.log(messageObject.nick);
+	console.log(messageObject.color);
+	console.log(messageObject.msg);
+	io.emit(channelPublic, messageObject);
    });
     // garou
     var channelGarou = 'chat message garou';
