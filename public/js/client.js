@@ -70,7 +70,7 @@ $(function () {
 	newLi.css('color', messageObject.color);
 	newLi.text(messageObject.nick + ": " + messageObject.msg);
 	$('#messages-public').append(newLi);
-	//scroll to bottomx
+	//scroll to bottom
 	$('.mini-chatroom-container').scrollTop($('#messages-public')[0].scrollHeight);
     });
     
