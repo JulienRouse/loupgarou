@@ -24,9 +24,12 @@ io.on('connection', function(socket){
     // public
     var channelPublic = 'chat message public';
     socket.on(channelPublic, function(messageObject){
-	console.log(messageObject.nick);
-	console.log(messageObject.color);
-	console.log(messageObject.msg);
+	console.log("INFO: " +
+		    messageObject.nick +
+		    " is writing in the public channel with color:" +
+		    messageObject.color +
+		    " and the message was:" +
+		    messageObject.msg);
 	io.emit(channelPublic, messageObject);
    });
     // garou
