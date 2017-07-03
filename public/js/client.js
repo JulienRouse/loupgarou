@@ -50,6 +50,7 @@ function createMessageObject(nickname, colorCode, msgText){
 }
 
 
+
 $(function () {
     var socket = io();
    
@@ -65,10 +66,12 @@ $(function () {
 	return false;
     });
     socket.on('chat message public', function(messageObject){
-	var newLi = $("<li>");
+	var newLi = $("<li class='li-message-public'>");
 	newLi.css('color', messageObject.color);
 	newLi.text(messageObject.nick + ": " + messageObject.msg);
 	$('#messages-public').append(newLi);
+	//scroll to bottomx
+	$('.mini-chatroom-container').scrollTop($('#messages-public')[0].scrollHeight);
     });
     
     // garou

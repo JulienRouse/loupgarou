@@ -12,7 +12,7 @@ body { font: 13px Helvetica, Arial; }
 .game-container{height:500px;background-color:#eee;}
 /* chatroom */
 .chatrooms-container{height:50%;}
-.mini-chatroom-container{width:50%;border:1px solid black;position:relative;float:left;}
+.mini-chatroom-container{width:50%;border:1px solid black;position:relative;float:left;height:300px;overflow-y:auto;}
 
 
 form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 50%; }
@@ -21,7 +21,7 @@ form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 50%; }
 
 form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
 form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-.chatrooms { list-style-type: none; margin: 0; padding: 0;position:absolute;top:0;height:500px;width:100%}
-.chatrooms li { padding: 5px 10px;height:18px;line-height:9px}
+.chatrooms { list-style-type: none; margin: 0; padding: 0;position:absolute;top:0;min-height:200px;width:100%}
+.chatrooms li { padding: 5px 10px;word-break:break-all;}
 .chatrooms li:nth-child(even) { background: #eee; }
 #messages-garou li:nth-child(odd){background:red}
