@@ -2,9 +2,10 @@
 * client.js
 */
 
-
 /**
-* void editNckname(Object)
+* void editNickname(Object)
+*
+* edit the nickname of the client
 *
 * @param {Object} element the element the method will apply on
 * @return void
@@ -14,13 +15,15 @@
 */
 function editNickname(element){
     $('#nickname').prop('disabled', false);
-    element.setAttribute('onclick','saveNickname(this)');
+    element.setAttribute('onclick','saveNickAndsendNick(this)');
     element.innerHTML = "save";
 }
 
 /**
-* void saveNckname(Object)
+* void saveNickname(Object)
 *
+* save the nickname of the client
+* 
 * @param {Object} element the element the method will apply on
 * @return void
 * @side-effect: - set the disable property of #nickname to true
@@ -31,6 +34,18 @@ function saveNickname(element){
     $('#nickname').prop('disabled', true);
     element.setAttribute('onclick','editNickname(this)');
     element.innerHTML = "edit";
+}
+
+/**
+* 
+*
+* 
+*
+*
+*/
+function saveNickAndsendNick(element){
+    saveNickname(element);
+    socket.emit('change name',$('#nickname').val());
 }
 
 /**
@@ -52,8 +67,11 @@ function createMessageObject(nickname, colorCode, msgText){
 
 
 $(function () {
-    var socket = io();
+    socket = io();
+    // on connection, send name to the server
    
+    socket.emit('new user', $('#nickname').val());
+    
     // HEADER -------------------------------------------------------------------------
     $('#colorPicker').change(function(){
 	$('#nickname').css("border-color", $('#colorPicker').val());
@@ -69,7 +87,10 @@ $(function () {
 	var newLi = $("<li class='li-message-public'>");
 	newLi.css('color', messageObject.color);
 	newLi.text(messageObject.nick + ": " + messageObject.msg);
+	//?FIX or USE?
+	newLi.prepend($('<span></span>'));
 	$('#messages-public').append(newLi);
+	
 	//scroll to bottom
 	$('.mini-chatroom-container').scrollTop($('#messages-public')[0].scrollHeight);
     });
@@ -81,8 +102,14 @@ $(function () {
 	return false;
     });
     socket.on('chat message garou', function(msg){
-	$('#messages-garou').append($('<li>').text(msg));
+	var chatUl = $('#messages-garou');
+	$('#messages-garou').empty();
+	for(var i=0;i<msg.length;i++){
+	    console.log(msg);
+	    $('#messages-garou').append($('<li>').text(msg[i].name));
+	}
     });
+
 
 });
 

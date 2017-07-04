@@ -10,6 +10,7 @@ body { font: 13px Helvetica, Arial; }
 
 /* place for the game */
 .game-container{height:500px;background-color:#eee;}
+.game-player{height:50px;background-color:pink;width:33%;margin:1px}
 /* chatroom */
 .chatrooms-container{height:50%;}
 .mini-chatroom-container{width:50%;border:1px solid black;position:relative;float:left;height:300px;overflow-y:auto;}
