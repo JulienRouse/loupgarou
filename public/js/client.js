@@ -70,13 +70,26 @@ function createLiRightOrder(socketId){
     console.log("socket id: socketID");
     console.log("list" + _gbl_listSpectator);
     var ul = $('#game-list');
+
+    var start_li = '<li class="game-player';
+    var optional_red  = ' red';
+    var close_angle = '" >';
+    var close_li = '</li>';
+
+    var res = start_li;
     ul.empty();
     for(var i=0;i<_gbl_listSpectator.length;i++){
+	if(_gbl_listSpectator[i].ready){
+	    res += red
+	} 
+	res += close_angle + _gbl_listSpectator[i].name + close_li;
+	console.log("res: " + res);
+	
 	if(_gbl_listSpectator[i].id == socketId){
-	    ul.prepend($('<li class="game-player">'+_gbl_listSpectator[i].name+'</li>'));
+	    ul.prepend($(res));
 	    console.log("bon id");
 	}else{
-	    ul.append($('<li class="game-player">'+_gbl_listSpectator[i].name+'</li>'));
+	    ul.append($(res));
 	    console.log("mauvais id");
 	}
     }
