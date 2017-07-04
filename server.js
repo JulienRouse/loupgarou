@@ -33,6 +33,7 @@ app.get('/', function(req, res){
 function Player(id, name){
     this.id = id;
     this.name = name;
+    this.ready = false;
 }
 
 /**
@@ -59,7 +60,7 @@ function removePlayer(iterable, id){
 *
 * set the name of the Player object in iterable with identifier id 
 *
-* @param {array} iterable an iterable where the deletion is done
+* @param {array} iterable an iterable where the setting is done
 * @param {string} id the identifier of the Player object to name
 * @param {string} name the name to give to the Player
 * @return void
@@ -73,9 +74,29 @@ function setPlayerName(iterable, id, name){
 	}
     }
 }
+/**
+* void setPlayerName (array, string, string)
+*
+* set the ready of the Player object in iterable with identifier id 
+*
+* @param {array} iterable an iterable where the setting is done
+* @param {string} id the identifier of the Player object to set to ready
+* @param {string} ready the name to give to the Player
+* @return void
+* @side-effect: change the ready of object of identifier id in iterable
+*/
+function setPlayerReady(iterable, id, ready){
+    for(var i = 0;i<iterable.length;i++){
+	if(iterable[i] != undefined && iterable[i].id == id){
+	    console.log("setPlayerReady " + ready);
+	    iterable[i].ready = ready;
+	}
+    }
+}
+
 
 //holds the list of Player objects
-var _gbl_listPlayer = [];
+var _gbl_listSpectator = [];
 
 // ----- interactions with sockets --------------------------------------------------------------------
 io.on('connection', function(socket){
@@ -83,6 +104,7 @@ io.on('connection', function(socket){
     const CHANNEL_PUBLIC = 'chat message public';
     const CHANNEL_NEW_USER = 'new user';
     const CHANNEL_CHANGE_NAME = 'change name';
+    const CHANNEL_READY = 'ready';
     
     //new user connection
     socket.on(CHANNEL_NEW_USER, function(name){
@@ -98,6 +120,8 @@ io.on('connection', function(socket){
 	io.emit(CHANNEL_GAROU, _gbl_listSpectator);
 	console.log(socket.id + ", changed name to "+ name +" and listpeople:" + _gbl_listSpectator);
     });
+    //ready
+    // ---------------------------------------------------------------------
     // public
     socket.on(CHANNEL_PUBLIC, function(messageObject){
 	console.log("INFO: " +

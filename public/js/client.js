@@ -1,6 +1,10 @@
 /*
 * client.js
 */
+//globals
+var _gbl_listSpectator = [];
+var _gbl_gameStarted = false;
+var _gbl_user = {}
 
 /**
 * void editNickname(Object)
@@ -37,11 +41,7 @@ function saveNickname(element){
 }
 
 /**
-* 
-*
-* 
-*
-*
+* combine saveNickname and a socket.emit to update the name in user list
 */
 function saveNickAndsendNick(element){
     saveNickname(element);
@@ -64,18 +64,45 @@ function createMessageObject(nickname, colorCode, msgText){
     return {nick : nickname, color : colorCode, msg : msgText};
 }
 
-
+/** construct dynamically list of ready
+*/
+function createLiRightOrder(socketId){
+    console.log("socket id: socketID");
+    console.log("list" + _gbl_listSpectator);
+    var ul = $('#game-list');
+    ul.empty();
+    for(var i=0;i<_gbl_listSpectator.length;i++){
+	if(_gbl_listSpectator[i].id == socketId){
+	    ul.prepend($('<li class="game-player">'+_gbl_listSpectator[i].name+'</li>'));
+	    console.log("bon id");
+	}else{
+	    ul.append($('<li class="game-player">'+_gbl_listSpectator[i].name+'</li>'));
+	    console.log("mauvais id");
+	}
+    }
+    console.log("fin createLiRightOrder");
+}
 
 $(function () {
     socket = io();
     // on connection, send name to the server
-   
     socket.emit('new user', $('#nickname').val());
     
     // HEADER -------------------------------------------------------------------------
     $('#colorPicker').change(function(){
 	$('#nickname').css("border-color", $('#colorPicker').val());
     });
+    // GAME ---------------------------------------------------------------------------
+    if(!_gbl_gameStarted){
+	var element = $('#game-list');
+	element.on("click", 'li:first', (function(){
+	    $(this).css('background-color','red');
+	    socket.emit('ready');
+	}));
+    }else
+    {
+	console.log();
+    }
     // CHAT   -------------------------------------------------------------------------
     //public
     $('#form-public').submit( function(){
@@ -108,6 +135,9 @@ $(function () {
 	    console.log(msg);
 	    $('#messages-garou').append($('<li>').text(msg[i].name));
 	}
+	_gbl_listSpectator = msg;
+	console.log("chat message garou: " + _gbl_listSpectator);
+	createLiRightOrder(socket.id);
     });
 
 
