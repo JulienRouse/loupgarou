@@ -81,7 +81,7 @@ function setPlayerName(iterable, id, name){
 *
 * @param {array} iterable an iterable where the setting is done
 * @param {string} id the identifier of the Player object to set to ready
-* @param {string} ready the name to give to the Player
+* @param {string} ready the state of ready
 * @return void
 * @side-effect: change the ready of object of identifier id in iterable
 */
@@ -93,7 +93,24 @@ function setPlayerReady(iterable, id, ready){
 	}
     }
 }
-
+/**
+* void togglePlayerName (array, string, string)
+*
+* toggle the ready state of the Player object in iterable with identifier id 
+*
+* @param {array} iterable an iterable where the setting is done
+* @param {string} id the identifier of the Player object to toggle to ready
+* @return void
+* @side-effect: change the ready of object of identifier id in iterable
+*/
+function togglePlayerReady(iterable, id){
+    for(var i = 0;i<iterable.length;i++){
+	if(iterable[i] != undefined && iterable[i].id == id){
+	    console.log("togglePlayerReady ");
+	    iterable[i].ready = !iterable[i].ready;
+	}
+    }
+}
 
 //holds the list of Player objects
 var _gbl_listSpectator = [];
@@ -121,6 +138,10 @@ io.on('connection', function(socket){
 	console.log(socket.id + ", changed name to "+ name +" and listpeople:" + _gbl_listSpectator);
     });
     //ready
+    socket.on(CHANNEL_READY, function(){
+	togglePlayerReady(_gbl_listSpectator, socket.id);
+	io.emit(CHANNEL_GAROU, _gbl_listSpectator);
+    });
     // ---------------------------------------------------------------------
     // public
     socket.on(CHANNEL_PUBLIC, function(messageObject){

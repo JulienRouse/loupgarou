@@ -72,15 +72,16 @@ function createLiRightOrder(socketId){
     var ul = $('#game-list');
 
     var start_li = '<li class="game-player';
-    var optional_red  = ' red';
+    var optionnal_red  = ' red';
     var close_angle = '" >';
     var close_li = '</li>';
 
-    var res = start_li;
+    var res = '';
     ul.empty();
     for(var i=0;i<_gbl_listSpectator.length;i++){
+	res = start_li;
 	if(_gbl_listSpectator[i].ready){
-	    res += red
+	    res += optionnal_red;
 	} 
 	res += close_angle + _gbl_listSpectator[i].name + close_li;
 	console.log("res: " + res);
