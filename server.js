@@ -86,17 +86,17 @@ io.on('connection', function(socket){
     
     //new user connection
     socket.on(CHANNEL_NEW_USER, function(name){
-	_gbl_listPlayer.push(new Player(socket.id, name));
-	io.emit(CHANNEL_GAROU, _gbl_listPlayer);
-	console.log(socket.id + ", name is "+ name +" and listpeople:" + _gbl_listPlayer);
+	_gbl_listSpectator.push(new Player(socket.id, name));
+	io.emit(CHANNEL_GAROU, _gbl_listSpectator);
+	console.log(socket.id + ", name is "+ name +" and listpeople:" + _gbl_listSpectator);
     });
     //user change name
     socket.on(CHANNEL_CHANGE_NAME, function(name){
-	console.log("NAME_CHANGE " + _gbl_listPlayer);
-	setPlayerName(_gbl_listPlayer, socket.id, name);
-	console.log(_gbl_listPlayer);
-	io.emit(CHANNEL_GAROU, _gbl_listPlayer);
-	console.log(socket.id + ", changed name to "+ name +" and listpeople:" + _gbl_listPlayer);
+	console.log("NAME_CHANGE " + _gbl_listSpectator);
+	setPlayerName(_gbl_listSpectator, socket.id, name);
+	console.log(_gbl_listSpectator);
+	io.emit(CHANNEL_GAROU, _gbl_listSpectator);
+	console.log(socket.id + ", changed name to "+ name +" and listpeople:" + _gbl_listSpectator);
     });
     // public
     socket.on(CHANNEL_PUBLIC, function(messageObject){
@@ -117,10 +117,10 @@ io.on('connection', function(socket){
     //disconnect
     socket.on('disconnect', function() {
 	console.log("A user is diconnected");
-	console.log(socket.id + ", listpeople:" + _gbl_listPlayer);
-	removePlayer(_gbl_listPlayer, socket.id);
-	console.log("a player was remover, here the new list" + _gbl_listPlayer);
-	io.emit('chat message garou', _gbl_listPlayer);
+	console.log(socket.id + ", listpeople:" + _gbl_listSpectator);
+	removePlayer(_gbl_listSpectator, socket.id);
+	console.log("a player was remover, here the new list" + _gbl_listSpectator);
+	io.emit('chat message garou', _gbl_listSpectator);
     });
     
 });
