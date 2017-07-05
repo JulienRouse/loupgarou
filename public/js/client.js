@@ -98,6 +98,10 @@ function createLiRightOrder(socketId){
     console.log("fin createLiRightOrder");
 }
 
+/**
+*
+*
+*/
 function launchTimer(){
     // Update the count down every 1 second
     console.log("launchTimer");
@@ -142,18 +146,25 @@ $(function () {
 	element.on("click", 'li:first', (function(){
 	    $(this).css('background-color','red');
 	    socket.emit('ready');
-	    if(_gbl_timer == undefined){
-		_gbl_timer = launchTimer()
-	    }
-	    else{
-		clearInterval(_gbl_timer);
-		_gbl_timer = undefined;
-	    }
 	}));
     }else
     {
 	console.log();
     }
+    //timer on
+    socket.on('launch timer', function(){
+	if(_gbl_timer != undefined){
+	    clearInterval(_gbl_timer);
+	    }
+	_gbl_timer = launchTimer();
+    });
+    //timer off
+    socket.on('stop timer', function(){
+	if(_gbl_timer != undefined){
+	    clearInterval(_gbl_timer);
+	}
+	_gbl_timer = undefined;
+    });
     // CHAT   -------------------------------------------------------------------------
     //public
     $('#form-public').submit( function(){

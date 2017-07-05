@@ -113,7 +113,7 @@ function togglePlayerReady(iterable, id){
 }
 /**
 * number countPlayerReady (array)
-*
+ *
 * return the number of player being ready
 *
 * @param {array} iterable an iterable containing Player object
@@ -142,7 +142,8 @@ io.on('connection', function(socket){
     const CHANNEL_NEW_USER = 'new user';
     const CHANNEL_CHANGE_NAME = 'change name';
     const CHANNEL_READY = 'ready';
-    
+    const CHANNEL_LAUNCH_TIMER = 'launch timer';
+    const CHANNEL_STOP_TIMER = 'stop timer';
     //new user connection
     socket.on(CHANNEL_NEW_USER, function(name){
 	_gbl_listSpectator.push(new Player(socket.id, name));
@@ -163,6 +164,13 @@ io.on('connection', function(socket){
     socket.on(CHANNEL_READY, function(){
 	togglePlayerReady(_gbl_listSpectator, socket.id);
 	io.emit(CHANNEL_GAROU, _gbl_listSpectator);
+	console.log("READY");
+	if(countPlayerReady(_gbl_listSpectator)>= 3){
+	    io.emit(CHANNEL_LAUNCH_TIMER);
+	}else{
+	    io.emit(CHANNEL_STOP_TIMER);
+	    console.log("READY:notimer");
+	}
     });
     
     // ---------------------------------------------------------------------
