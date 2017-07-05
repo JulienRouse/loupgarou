@@ -111,9 +111,29 @@ function togglePlayerReady(iterable, id){
 	}
     }
 }
+/**
+* number countPlayerReady (array)
+*
+* return the number of player being ready
+*
+* @param {array} iterable an iterable containing Player object
+* @return {number} the number of player being ready
+* @side-effect: void
+*/
+function countPlayerReady(iterable){
+    var res = 0;
+    for(var i = 0;i<iterable.length;i++){
+	if(iterable[i] != undefined && iterable[i].ready){
+	    res++;
+	}
+    }
+    console.log("countPlayerReady:" + res);
+    return res;
+}
 
 //holds the list of Player objects
 var _gbl_listSpectator = [];
+var _gbl_numberReadySpectator = 0;
 
 // ----- interactions with sockets --------------------------------------------------------------------
 io.on('connection', function(socket){
@@ -129,6 +149,7 @@ io.on('connection', function(socket){
 	io.emit(CHANNEL_GAROU, _gbl_listSpectator);
 	console.log(socket.id + ", name is "+ name +" and listpeople:" + _gbl_listSpectator);
     });
+    
     //user change name
     socket.on(CHANNEL_CHANGE_NAME, function(name){
 	console.log("NAME_CHANGE " + _gbl_listSpectator);
@@ -137,11 +158,13 @@ io.on('connection', function(socket){
 	io.emit(CHANNEL_GAROU, _gbl_listSpectator);
 	console.log(socket.id + ", changed name to "+ name +" and listpeople:" + _gbl_listSpectator);
     });
+    
     //ready
     socket.on(CHANNEL_READY, function(){
 	togglePlayerReady(_gbl_listSpectator, socket.id);
 	io.emit(CHANNEL_GAROU, _gbl_listSpectator);
     });
+    
     // ---------------------------------------------------------------------
     // public
     socket.on(CHANNEL_PUBLIC, function(messageObject){

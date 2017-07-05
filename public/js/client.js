@@ -5,7 +5,7 @@
 var _gbl_listSpectator = [];
 var _gbl_gameStarted = false;
 var _gbl_user = {}
-
+var _gbl_timer = undefined;
 /**
 * void editNickname(Object)
 *
@@ -64,6 +64,7 @@ function createMessageObject(nickname, colorCode, msgText){
     return {nick : nickname, color : colorCode, msg : msgText};
 }
 
+// TODO REFACTOR? COMMENT!
 /** construct dynamically list of ready
 */
 function createLiRightOrder(socketId){
@@ -97,6 +98,35 @@ function createLiRightOrder(socketId){
     console.log("fin createLiRightOrder");
 }
 
+function launchTimer(){
+    // Update the count down every 1 second
+    console.log("launchTimer");
+    var countDownDate = new Date(new Date().getTime() + 10*1000);
+    
+    var x = setInterval(function() {
+	console.log("launchTimer:setInterval");
+	// Get todays date and time
+	var now = new Date().getTime();
+	// Find the distance between now an the count down date
+	var distance = countDownDate - now;
+
+	// Time calculations for days, hours, minutes and seconds
+	var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+	console.log("launchTimer:setInterval:"+seconds);
+	console.log("launchTimer:setInterval:"+minutes);
+	// Display the result in the element with id=game-time
+	$("#game-timer").text(minutes + ":" + seconds);
+	// If the count down is finished, write some text
+	if (distance < 0) {
+	    clearInterval(x);
+	    $("#game-timer").text("EXPIRED");
+	}
+    }, 1000);
+    return x;
+}
+
+
 $(function () {
     socket = io();
     // on connection, send name to the server
@@ -112,6 +142,13 @@ $(function () {
 	element.on("click", 'li:first', (function(){
 	    $(this).css('background-color','red');
 	    socket.emit('ready');
+	    if(_gbl_timer == undefined){
+		_gbl_timer = launchTimer()
+	    }
+	    else{
+		clearInterval(_gbl_timer);
+		_gbl_timer = undefined;
+	    }
 	}));
     }else
     {
