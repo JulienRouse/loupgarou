@@ -144,6 +144,7 @@ io.on('connection', function(socket){
     const CHANNEL_READY = 'ready';
     const CHANNEL_LAUNCH_TIMER = 'launch timer';
     const CHANNEL_STOP_TIMER = 'stop timer';
+    const CHANNEL_DISCONNECT_USER = 'disconnect user';
     //new user connection
     socket.on(CHANNEL_NEW_USER, function(name){
 	_gbl_listSpectator.push(new Player(socket.id, name));
@@ -196,7 +197,8 @@ io.on('connection', function(socket){
 	console.log(socket.id + ", listpeople:" + _gbl_listSpectator);
 	removePlayer(_gbl_listSpectator, socket.id);
 	console.log("a player was remover, here the new list" + _gbl_listSpectator);
-	io.emit('chat message garou', _gbl_listSpectator);
+	io.emit(CHANNEL_GAROU, _gbl_listSpectator);
+	io.emit(CHANNEL_DISCONNECT_USER, _gbl_listSpectator);
     });
     
 });
