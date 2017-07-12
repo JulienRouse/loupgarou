@@ -2,6 +2,7 @@
 *
 * server.js
 */
+const game = require('./game');
 const express = require('express');
 const app = require('express')();
 const http = require('http').Server(app);
@@ -20,22 +21,6 @@ app.get('/', function(req, res){
 });
 
 // --------------- define object player----------------------------
-/**
-* Player Player(string, string)
-*
-* constructor for the Player type
-*
-* @param {string} id the id of the player, is the id of the socket
-* @param {string} name the name of the player, as defined by the user
-* @return {Player} Player object
-* @side-effect: void
-*/
-function Player(id, name){
-    this.id = id;
-    this.name = name;
-    this.ready = false;
-}
-
 /**
 * void removePlayer (array, string)
 *
@@ -129,9 +114,26 @@ function countPlayerReady(iterable){
     }
     console.log("countPlayerReady:" + res);
     return res;
+
+}
+//init all the variables 
+function startGame(sock){
+    _gbl_listPlayer = _gbl_listSpectator.filter(function(element){
+	return element.ready
+    });
+    //assign role
+    _gbl_listPlayer = assignRole(_gbl_listPlayer);
+    //emit to each player
+    _gbl_listPlayer.map(function(element){
+	sock.to(element.id).emit(CHANNEL_STOP_TIMER);
+	sock.to(element.id).emit(CHANNEL_START_GAME);
+	sock.to(element.id).emit(CHANNEL_ASSIGN_ROLE, element.role);
+	sock.to(element.id).emit(CHANNEL_FIRST_NIGHT);
+    });
 }
 
 //holds the list of Player objects
+var _gbl_listPlayer = [];
 var _gbl_listSpectator = [];
 var _gbl_numberReadySpectator = 0;
 
@@ -145,9 +147,11 @@ io.on('connection', function(socket){
     const CHANNEL_LAUNCH_TIMER = 'launch timer';
     const CHANNEL_STOP_TIMER = 'stop timer';
     const CHANNEL_DISCONNECT_USER = 'disconnect user';
+    const CHANNEL_START_GAME = 'start game';
+    const CHANNEL_
     //new user connection
     socket.on(CHANNEL_NEW_USER, function(name){
-	_gbl_listSpectator.push(new Player(socket.id, name));
+	_gbl_listSpectator.push(new game.Player(socket.id, name));
 	io.emit(CHANNEL_GAROU, _gbl_listSpectator);
 	console.log(socket.id + ", name is "+ name +" and listpeople:" + _gbl_listSpectator);
     });
@@ -168,10 +172,15 @@ io.on('connection', function(socket){
 	console.log("READY");
 	if(countPlayerReady(_gbl_listSpectator)>= 3){
 	    io.emit(CHANNEL_LAUNCH_TIMER);
+	    console.log(game.assignRole(_gbl_listSpectator));
 	}else{
 	    io.emit(CHANNEL_STOP_TIMER);
 	    console.log("READY:notimer");
 	}
+    });
+    //start game 
+    socket.on(CHANNEL_START_GAME, function(){
+	startGame(socket);
     });
     
     // ---------------------------------------------------------------------

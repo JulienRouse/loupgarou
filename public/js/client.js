@@ -2,6 +2,7 @@
 * client.js
 */
 //globals
+var _gbl_listPlayer = []
 var _gbl_listSpectator = [];
 var _gbl_gameStarted = false;
 var _gbl_user = {}
@@ -99,10 +100,10 @@ function createLiRightOrder(socketId){
 }
 
 /**
-*
+* 
 *
 */
-function launchTimer(){
+function launchTimer(sock){
     // Update the count down every 1 second
     console.log("launchTimer");
     var countDownDate = new Date(new Date().getTime() + 10*1000);
@@ -125,9 +126,15 @@ function launchTimer(){
 	if (distance < 0) {
 	    clearInterval(x);
 	    $("#game-timer").text("EXPIRED");
+	    startGame(sock); //implement that:p
 	}
     }, 1000);
     return x;
+}
+
+//startGame
+function startGame(sock){
+    sock.emit("start game");
 }
 
 
@@ -165,6 +172,11 @@ $(function () {
 	}
 	_gbl_timer = undefined;
     });
+    //game start
+    socket.on('start game', function(players){
+	_gbl_gameStarted = true;
+	_gbl_listPlayer = players;
+    });
     // CHAT   -------------------------------------------------------------------------
     //public
     $('#form-public').submit( function(){
@@ -201,7 +213,6 @@ $(function () {
 	console.log("chat message garou: " + _gbl_listSpectator);
 	createLiRightOrder(socket.id);
     });
-
 
 });
 
